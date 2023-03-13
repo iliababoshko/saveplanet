@@ -1,0 +1,48 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<style>
+.raz {
+  border-collapse: collapse;
+}
+.raz td {
+  border: 1px solid black;
+  padding: .3em 1em;  /* значения внутренних отступов ячейки от верхнего и нижнего и от правого и левого краёв */
+}
+    .raz th {
+  border: 1px solid black;
+  padding: .3em 1em;  /* значения внутренних отступов ячейки от верхнего и нижнего и от правого и левого краёв */
+}
+</style>
+    <form method="POST">
+        {% csrf_token %}
+        <h1>{{ test }}</h1>
+        <label>Добавить ученика:</label><br>
+    <input placeholder="Фамилия" name="surname" type="text">
+    <input placeholder="Имя" name="name" type="text">
+    <input type="submit" value="Оплатить ученика"><br><br>
+    </form>
+    {% if student_list %}
+        <table class="raz">
+            <tr>
+                <th>Ученик</th>
+                <th>Тест</th>
+                <th>Бланк теста</th>
+            </tr>
+        {% for student in student_list %}
+            <tr>
+                <td> {{student.surname}} {{student.name}}</td>
+                {% if student.id in results %}
+                <td>тест пройден</td>
+                {% else %}
+                <td> <a href="{{ test.get_absolute_url }}?sid={{student.id}}">пройти онлайн </a></td>
+                {% endif %}
+                <td><a href="{{ test.get_absolute_url }}?sid={{student.id}}&pdf=1">скачать PDF</a></td>
+            </tr>
+
+        {% endfor %}
+        </table>
+    {% else %}
+        <p>В базе нет результатов</p>
+    {% endif %}
+{% endblock %}

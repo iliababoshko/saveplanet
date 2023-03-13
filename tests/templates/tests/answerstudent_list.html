@@ -1,0 +1,51 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<style>
+.raz {
+  border-collapse: collapse;
+}
+.raz td {
+  border: 1px solid black;
+  padding: .3em 1em;  /* значения внутренних отступов ячейки от верхнего и нижнего и от правого и левого краёв */
+}
+    .raz th {
+  border: 1px solid black;
+  padding: .3em 1em;  /* значения внутренних отступов ячейки от верхнего и нижнего и от правого и левого краёв */
+}
+</style>
+    {% if answerstudent_list %}
+        <p>Результаты {{ student.surname }} {{student.name}} в тесте {{ test }}</p>
+<table class="raz">
+        <tr>
+            <th>Вопрос</th>
+            <th>Ответы ученика</th>
+            <th>Оценка ответа</th>
+        </tr>
+{% for question in questions %}
+    <tr>
+        <td>{{ question }}</td>
+        <td>
+
+            {% for answer in answerstudent_list %}
+                {% if answer.question == question %}
+                <div>{{ answer.answerstud }}</div>
+                {% endif %}
+            {% endfor %}
+
+        </td>
+        <td>
+            {% for q, a in qadict.items %}
+                {% if q == question.id %}
+                    {{ a }}
+                {% endif %}
+            {% endfor %}
+        </td>
+    </tr>
+{% endfor %}
+</table>
+
+    {% else %}
+        <p>В базе нет результатов</p>
+    {% endif %}
+{% endblock %}

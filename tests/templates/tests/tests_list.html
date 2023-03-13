@@ -1,0 +1,46 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Список тестов:</h1>
+    {% if tests_list %}
+    <ul>
+    {% for theme in themetest %}
+        {% if not theme.is_overdue or request.user.is_staff %}
+        {% if theme.is_overdue %}
+        <li><s>{{ theme.name }} (c {{ theme.fromdate}} по {{ theme.tilldate}})</s></li>
+        {% elif theme.is_notbegin %}
+        <li><i>{{ theme.name }} (c {{ theme.fromdate}} по {{ theme.tilldate}})</i></li>
+        {% else %}
+        <li><b>{{ theme.name }}</b> (c {{ theme.fromdate}} по {{ theme.tilldate}})</li>
+        {% endif %}
+
+        <ul>
+        {% for test in tests_list %}
+
+
+
+            {% if not theme.is_notbegin or request.user.is_staff %}
+            {% if test.themetest.name == theme.name %}
+                <li>
+
+                        {% if theme.is_notbegin or theme.is_overdue %}
+                        <a href="{{ test.get_absolute_url }}"><s>{{ test.agedef.agedef }}</s></a>
+                        {% else %}
+                        <a href="../students/{{ test.id }}/">{{ test.agedef.agedef }}</a>
+                        {% endif %}
+
+                </li>
+            {% endif %}
+            {% endif %}
+
+        {% endfor %}
+        </ul>
+        {% endif %}
+
+    {% endfor %}
+    </ul>
+
+    {% else %}
+        <p>В базе нет тестов</p>
+    {% endif %}
+{% endblock %}

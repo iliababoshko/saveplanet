@@ -1,0 +1,27 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<ul>
+{% for key, value in results.items %}
+  <li>{{key}}</li>
+    <ul>
+    {% for val in value %}
+        {% for name, mesto in val.items %}
+        <li>{{ name }} -
+        {% if mesto == 0 %}
+            1 место
+        {% elif mesto == 1 or mesto == 2 %}
+            2 место
+        {% elif mesto == 3 %}
+            3 место
+        {% else %}
+            участник
+        {% endif %}
+
+        </li>
+        {% endfor %}
+    {% endfor %}
+    <ul>
+{% endfor %}
+</ul>
+{% endblock %}

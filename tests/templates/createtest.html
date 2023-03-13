@@ -1,0 +1,95 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>Создание теста</h1>
+<form method="POST">
+    {% csrf_token %}
+<label for="themetest">Введите название нового теста:</label><br>
+<input type="text" name="themetest"><br>
+<label for="fromdate">Введите дату начала теста </label><br>
+<input type="date" name="fromdate"><br>
+<label for="tilldate">Введите дату окончания теста </label><br>
+<input type="date" name="tilldate"><br>
+
+<label for="tematest">Либо выберите тематику теста из уже существующих:</label><br>
+<select id="tematest" name="tematest">
+    <option value="na" selected>Выберите тему</option>
+    {% for themetest in themetests %}
+     <option value="{{ themetest.id }}">{{ themetest.name }}</option>
+    {% endfor %}
+</select><br>
+<label for="agegroups">Выберите возрастную группу:</label>
+    <select id="agegroups" name="agegroups">
+    {% for agegroup in agegroups %}
+     <option value="{{ agegroup.id }}">{{ agegroup.agedef }}</option>
+    {% endfor %}
+</select>
+
+<hr size="8">
+<label for="q1">Введите вопрос №1</label><br>
+
+
+<input type="text" name="q1"> <input type="button" id="addanswer1" value="добавить ответ" onclick="addAnsw(this.id)"><br>
+        <ul id="ul1">
+            <li type="1">
+<label for="a11">Ответ №1</label><br>
+<input type="text" name="a11">
+<label for="t11">Правильный?</label>
+<input type="checkbox" name="t11"><br>
+
+
+    </li>
+</ul>
+
+
+<hr size="8">
+
+<input type="button" name="qb" value="Добавить вопрос" onclick="addEl()"> <br>
+<div align="center"><input type="submit" value="Создать тест"></div>
+</form>
+<script>
+
+function addAnsw(val) {
+numel = val.slice(9);
+
+
+
+add = document.getElementById(val);
+
+    var ul = document.getElementById('ul'+numel);
+    var numli = String(document.getElementById('ul'+numel).getElementsByTagName('li').length + 1);
+  var li = document.createElement('li');
+  li.type = '1';
+  li.innerHTML = "<label for=\"a"+numel+numli+"\">Ответ №"+numli+"</label><br>\n" +
+      "<input type=\"text\" name=\"a"+numel+numli+"\">\n" +
+      "<label for=\"t"+numel+numli+"\">Правильный?</label>\n" +
+      "<input type=\"checkbox\" name=\"t"+numel+numli+"\"><br>";
+  ul.append(li);
+
+}
+</script>
+<script>
+    function addEl() {
+        let numhr = String(document.querySelectorAll('hr[size="8"]').length);
+        let allhr =  document.querySelectorAll('hr[size="8"]');
+        let lasthr = allhr[document.querySelectorAll('hr[size="8"]').length - 1];
+        lasthr.insertAdjacentHTML('afterend', "<label for=\"q"+numhr+"\">Введите вопрос №"+numhr+"</label><br>\n" +
+            "\n" +
+            "<input type=\"text\" name=\"q"+numhr+"\"> <input type=\"button\" id=\"addanswer"+numhr+"\" value=\"добавить ответ\" onclick=\"addAnsw(this.id)\"><br>\n" +
+            "        <ul id=\"ul"+numhr+"\">\n" +
+            "            <li type=\"1\">\n" +
+            "<label for=\"a"+numhr+"1\">Ответ №1</label><br>\n" +
+            "<input type=\"text\" name=\"a"+numhr+"1\">\n" +
+            "<label for=\"t"+numhr+"1\">Правильный?</label>\n" +
+            "<input type=\"checkbox\" name=\"t"+numhr+"1\"><br>\n" +
+            "\n" +
+            "\n" +
+            "    </li>\n" +
+            "</ul>\n" +
+            "\n" +
+            "\n" +
+            "<hr size=\"8\">")
+
+    }
+  </script>
+{% endblock %}

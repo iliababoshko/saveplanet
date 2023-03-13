@@ -1,0 +1,36 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div><b>{{ tests.themetest.name }}</b> ({{ tests.agedef.agedef }}):</div>
+<div>Отвечает <b>{{ student.surname }} {{ student.surname }}</b></div>
+
+
+<hr>
+<form method="POST" action="/answer/">
+    {% csrf_token %}
+    <input name="student" type="hidden" value="{{ student.id }}">
+    <input name="qcount" type="hidden" value="{{ tests.questions_count }}">
+    <input name="test" type="hidden" value="{{ tests.id }}">
+<ul>
+
+{% for question in tests.questions_set.all %}
+    <li type="1"><b><i>{{ question.question }}</i></b></li><br>
+    <input name="questionid{{ forloop.counter0 }}" type="hidden" value="{{ question.id }}" >
+    <input name="countanswers{{ forloop.counter0 }}" type="hidden" value="{{ question.answers_count }}" >
+    <input name="countanswertrue{{ forloop.counter0 }}" type="hidden" value="{{ question.answer_true }}" >
+    {% for answer in question.answersvariant_set.all %}
+
+    {% if question.answer_true == 1 %}
+    <p><input name="answerrad{{ forloop.parentloop.counter0 }}" type="radio" value="{{ answer.varAnswer }}"> <label>{{ answer.varAnswer }}</label></p>
+    {% else %}
+    <p><input type="checkbox" name="answerchk{{ forloop.parentloop.counter0 }}" value="{{ answer.varAnswer }}" />
+    <label>{{ answer.varAnswer }}</label></p>
+    {% endif %}
+    {% endfor %}
+    <hr>
+{% endfor %}
+</ul>
+
+    <input type="submit" value="Отправить ответы">
+</form>
+{% endblock %}

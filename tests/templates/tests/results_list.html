@@ -1,0 +1,55 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<style>
+.raz {
+  border-collapse: collapse;
+}
+.raz td {
+  border: 1px solid black;
+  padding: .3em 1em;  /* значения внутренних отступов ячейки от верхнего и нижнего и от правого и левого краёв */
+}
+    .raz th {
+  border: 1px solid black;
+  padding: .3em 1em;  /* значения внутренних отступов ячейки от верхнего и нижнего и от правого и левого краёв */
+}
+</style>
+    <h1>Результаты:</h1>
+    {% if results_list %}
+    <ul>
+    {% for test in tests %}
+
+    <li>{{ test }}</li>
+    <table class="raz">
+                <tr>
+                    <th>Ученик</th>
+                    <th>Ответы</th>
+                    <th>Награда</th>
+                </tr>
+        {% for result in results_list %}
+            {% if result.test == test %}
+
+                <tr>
+                    <td>{{ result.student.surname }} {{ result.student.name }}</td>
+                    <td><a href="./{{ test.id }}/{{ result.student.id }}/"+>Смотреть</a></td>
+                    <td>
+                        {% if result.mistakes == 0 %}
+                        диплом за 1 место
+                        {% elif result.mistakes == 1 or result.mistakes == 2 %}
+                        диплом за 2 место
+                        {% elif result.mistakes == 3 %}
+                        диплом за 3 место
+                        {% else %}
+                        серитификат участника
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+            </table>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p>В базе нет результатов</p>
+    {% endif %}
+{% endblock %}
